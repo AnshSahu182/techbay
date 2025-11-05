@@ -4,6 +4,7 @@ import os
 from flask import Flask,request,jsonify
 from flask_cors import CORS
 import json
+from bson import ObjectId
 
 load_dotenv()
 app=Flask(__name__)
@@ -21,6 +22,29 @@ def show_categories():
         category['_id'] = str(category['_id'])
       
     return jsonify(category_list)
+
+def featured_products():
+    featured_ids = [
+        "65b54e14a39a3ffd12fd2c12",
+        "65b54e14a39a3ffd12fd2c10",
+        "65b54e14a39a3ffd12fd2c0e",
+        "65b54e14a39a3ffd12fd2c0c"
+    ]
+
+    # Convert strings to ObjectIds
+    object_ids = [ObjectId(pid) for pid in featured_ids]
+
+    # Fetch only these products
+    featured = list(products.find(
+        {"_id": {"$in": object_ids}},
+        {"_id": 1, "name": 1, "price": 1, "image": 1, "category": 1}  # optional: limit fields
+    ))
+
+    # Convert ObjectIds to strings for JSON
+    for prod in featured:
+        prod["_id"] = str(prod["_id"])
+
+    return jsonify(featured), 200
 
 
 

@@ -56,28 +56,6 @@ def get_by_price():
         product['_id'] = str(product['_id'])
     return jsonify(products_list), 200
 
-def featured_products():
-    featured_ids = [
-        "65b54e14a39a3ffd12fd2c12",
-        "65b54e14a39a3ffd12fd2c10",
-        "65b54e14a39a3ffd12fd2c0e",
-        "65b54e14a39a3ffd12fd2c0c"
-    ]
-
-    # Convert strings to ObjectIds
-    object_ids = [ObjectId(pid) for pid in featured_ids]
-
-    # Fetch only these products
-    featured = list(products.find(
-        {"_id": {"$in": object_ids}},
-        {"_id": 1, "name": 1, "price": 1, "image": 1, "category": 1}  # optional: limit fields
-    ))
-
-    # Convert ObjectIds to strings for JSON
-    for prod in featured:
-        prod["_id"] = str(prod["_id"])
-
-    return jsonify(featured), 200
 
 if __name__== '__main__':
     app.run(host='0.0.0.0' ,debug=True, port=5002)
