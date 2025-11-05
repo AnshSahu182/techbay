@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import {
   Box,
-  Button,
-  TextField,
-  Typography,
   Paper,
-  Link,
-  Divider,
+  Typography,
+  TextField,
+  Button,
   IconButton,
   InputAdornment,
+  Link,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
+export default function Signup() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleTogglePassword = () => setShowPassword(!showPassword);
+  const handleToggleConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   return (
     <Box
@@ -25,7 +27,7 @@ export default function LoginPage() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#f7f8fa",
+        backgroundColor: "#f9fafb",
         fontFamily: "Inter, sans-serif",
       }}
     >
@@ -53,7 +55,7 @@ export default function LoginPage() {
         </Box>
         <Typography
           sx={{
-            fontSize: "1.4rem",
+            fontSize: "1.2rem",
             fontWeight: 1000,
             color: "#111",
             fontFamily: "Inter, sans-serif",
@@ -76,41 +78,42 @@ export default function LoginPage() {
         <Paper
           elevation={3}
           sx={{
-            padding: 5,
             width: 380,
+            padding: 5,
             borderRadius: 4,
             textAlign: "center",
           }}
         >
           <Typography
             variant="h5"
-            sx={{
-              mb: 2,
-              fontWeight: 1000,
-              fontFamily: "Inter, sans-serif",
-            }}
+            sx={{ mb: 2, fontWeight: 1000, fontFamily: "Inter, sans-serif" }}
           >
-            Login
+            Create an Account
           </Typography>
 
           <TextField
-            label="Email Address"
-            placeholder="you@example.com"
-            type="email"
+            label="Full Name"
             fullWidth
             variant="outlined"
             margin="normal"
-            sx={{ fontFamily: "Inter, sans-serif" }}
+            placeholder="Enter your full name"
+          />
+
+          <TextField
+            label="Email Address"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            placeholder="Enter your email address"
           />
 
           <TextField
             label="Password"
-            placeholder="Enter your password"
             type={showPassword ? "text" : "password"}
             fullWidth
             variant="outlined"
             margin="normal"
-            sx={{ fontFamily: "Inter, sans-serif" }}
+            placeholder="Enter your password"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -122,65 +125,57 @@ export default function LoginPage() {
             }}
           />
 
-          <Box sx={{ textAlign: "right", mt: 1 }}>
-            <Link href="#" underline="hover" sx={{ fontSize: 14 }}>
-              Forgot Password?
-            </Link>
-          </Box>
+          <TextField
+            label="Confirm Password"
+            type={showConfirmPassword ? "text" : "password"}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            placeholder="Confirm your password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleToggleConfirmPassword} edge="end">
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
 
           <Button
             variant="contained"
-            color="primary"
             fullWidth
             sx={{
               mt: 3,
               py: 1.2,
+              backgroundColor: "#007bff",
               textTransform: "none",
               fontWeight: 600,
               borderRadius: 2,
               fontFamily: "Inter, sans-serif",
-            }}
-          >
-            Login
-          </Button>
-
-          <Divider sx={{ my: 3 }}>or</Divider>
-
-          <Button
-            variant="outlined"
-            fullWidth
-            sx={{
-              gap: 1,
-              py: 1.2,
-              textTransform: "none",
-              fontWeight: 500,
-              borderRadius: 2,
-              fontFamily: "Inter, sans-serif",
-              color: "#3c4043",
-              borderColor: "#dadce0",
               "&:hover": {
-                backgroundColor: "#ffffffff",
-                borderColor: "#5c3535ff",
+                backgroundColor: "#0069e0",
               },
             }}
           >
-            <Box
-              component="img"
-              src="https://techbay-um14.netlify.app/static/media/google_logo.e3727d762395819c0958.png"
-              alt="Google logo"
-              sx={{ width: 20, height: 20, mr: 1 }}
-            />
-            Continue with Google
+            Sign Up
           </Button>
 
-          <Typography sx={{ mt: 3, fontSize: 14 }}>
-            Don’t have an account?{" "}
+          <Typography
+            sx={{
+              mt: 3,
+              fontSize: 14,
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
+            Already have an account?{" "}
             <Link
               underline="hover"
-              onClick={() => navigate("/signup")}
               sx={{ cursor: "pointer" }}
+              onClick={() => navigate("/login")}
             >
-              Sign Up
+              Sign In
             </Link>
           </Typography>
         </Paper>
