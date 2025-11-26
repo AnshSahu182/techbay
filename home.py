@@ -3,17 +3,17 @@ from dotenv import load_dotenv
 import os
 from flask import Flask,request,jsonify
 from flask_cors import CORS
-import json
 from bson import ObjectId
 
 load_dotenv()
 app=Flask(__name__)
 CORS(app)
 client=MongoClient(os.getenv('MongoClient_URI'))
-db=client["TechbayDB"]
+db=client["techbay"]
 products=db["products"]
 categories=db["categories"]
 
+# Show Categories
 @app.route("/", methods=['GET'])
 def show_categories():
     category_list=list(categories.find({}))
@@ -23,13 +23,14 @@ def show_categories():
       
     return jsonify(category_list)
 
+# Featured Products
 @app.route("/feature", methods=['GET'])
 def featured_products():
     featured_ids = [
         "65b54e14a39a3ffd12fd2c12",
-        "65b54e14a39a3ffd12fd2c10",
         "65b54e14a39a3ffd12fd2c0e",
-        "65b54e14a39a3ffd12fd2c0c"
+        "65b54e14a39a3ffd12fd2c0c",
+        "65b54e15a39a3ffd12fd2c16"
     ]
 
     # Convert strings to ObjectIds
@@ -38,7 +39,7 @@ def featured_products():
     # Fetch only these products
     featured = list(products.find(
         {"_id": {"$in": object_ids}},
-        {"_id": 1, "name": 1, "price": 1, "image": 1, "category": 1}  # optional: limit fields
+        {"_id": 1, "title": 1,"description":1, "price": 1, "image": 1, "category": 1}  # optional: limit fields
     ))
 
     # Convert ObjectIds to strings for JSON
@@ -48,6 +49,5 @@ def featured_products():
     return jsonify(featured), 200
 
 
-
 if __name__== '__main__':
-    app.run(host='0.0.0.0' ,debug=True, port=5001)
+    app.run(host='0.0.0.0', port=5001,debug=True)
