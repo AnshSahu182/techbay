@@ -10,7 +10,7 @@ client=MongoClient(os.getenv('MongoClient_URI'))
 db=client["techbay"]
 products=db["products"]
 
-limit = 8
+limit = 12
 
 #Product Page
 # @app.route("/products", methods=['GET'])
@@ -28,8 +28,8 @@ def products_page():
 def get_by_category():
     data = request.get_json()
     category = data.get('category')
-    page = int(request.args.get("page", 1))
-    skip = (page - 1) * limit
+    # page = int(request.args.get("page", 1))
+    # skip = (page - 1) * limit
 
     if not category:
         return jsonify({"error": "Category is required"}), 400
@@ -44,8 +44,8 @@ def get_by_category():
 def get_by_brand():
     data = request.get_json()
     brand = data.get('brand')
-    page = int(request.args.get("page", 1))
-    skip = (page - 1) * limit
+    # page = int(request.args.get("page", 1))
+    # skip = (page - 1) * limit
 
     if not brand:
         return jsonify({"error": "Brand is required"}), 400
@@ -63,8 +63,8 @@ def get_by_price():
     min_price = float(data.get('min', 0))
     max_price = float(data.get('max', 5000))
 
-    page = int(request.args.get("page", 1))
-    skip = (page - 1) * limit
+    # page = int(request.args.get("page", 1))
+    # skip = (page - 1) * limit
 
     query = {"price":{"$gte":min_price,"$lte":max_price}}
     products_list=list(products.find(query).limit(limit))

@@ -152,7 +152,6 @@ def confirm_order(current_user):
 
         # Fetch address
         address = addresses.find_one({"owner": user_id})
-        print("###################################", address)
         if not address:
             return jsonify({"message": "No address found for this user!"}), 404
 
