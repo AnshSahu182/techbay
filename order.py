@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
-from flask import Flask,request,jsonify
+from flask import request,jsonify
 from bson import ObjectId
 from datetime import datetime
 
@@ -76,27 +76,38 @@ def confirm_order(current_user):
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
 
 # View Orders
-# @app.route('/orders', methods=['GET'])
-# @token_required
 def view_orders(current_user):
     user_id = current_user['_id']
     user_orders = list(orders.find({'owner': ObjectId(user_id)}))
-    print(user_orders)
+    
     if not user_orders:
         return jsonify({'message': 'No orders found for this user!'}), 404
     
-    # Convert ObjectIds and datetime for JSON response
+    result = []
+
     for order in user_orders:
-        order['_id'] = str(order['_id'])
-        order['owner'] = str(order['owner'])
-        order['address'] = str(order['address'])
-        order['createdAt'] = datetime.utcnow(),
-        order["updatedAt"]= datetime.utcnow()
-        for p in order['products']:
-            p['_id'] = str(p['_id'])
-            p['product'] = str(p['product'])
-    print(user_orders)
-    return jsonify({'orders': user_orders}), 200
+        # Convert top-level fields
+        formatted = {
+            "_id": str(order["_id"]),
+            "owner": str(order["owner"]),
+            "address": str(order["address"]),
+            "paymentId": order.get("paymentId", ""),
+            "amount": order.get("amount", 0),
+            "createdAt": str(order.get("createdAt")),
+            "updatedAt": str(order.get("updatedAt")),
+            "products": []
+        }
+
+        # Convert products
+        for p in order.get("products", []):
+            formatted["products"].append({
+                "product_id": str(p["product_id"]),
+                "quantity": p.get("quantity", 1)
+            })
+
+        result.append(formatted)
+
+    return jsonify({"orders": result}), 200
 
 
 # Cancel Order

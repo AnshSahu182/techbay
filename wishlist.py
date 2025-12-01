@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
-from flask import request,jsonify
+from flask import jsonify
 from bson import ObjectId
 
 load_dotenv()
@@ -54,15 +54,7 @@ def view_wishlist(current_user):
     
     wishlist = user.get('wishlist', [])
     products_list = []
-    # clean_wishlist = []
-    # for item in wishlist:
-    #     clean_item = {}
-    #     for key, value in item.items():
-    #         if isinstance(value, ObjectId):
-    #             clean_item[key] = str(value)
-    #         else:
-    #             clean_item[key] = value   
-    #     clean_wishlist.append(clean_item)
+
     for item in wishlist:
     # Convert ObjectId to string for JSON safety
         product_id = item.get("product_id")

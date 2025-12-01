@@ -28,9 +28,7 @@ def products_page():
 def get_by_category():
     data = request.get_json()
     category = data.get('category')
-    # page = int(request.args.get("page", 1))
-    # skip = (page - 1) * limit
-
+    
     if not category:
         return jsonify({"error": "Category is required"}), 400
 

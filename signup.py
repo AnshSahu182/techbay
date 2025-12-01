@@ -1,23 +1,16 @@
-from flask import Flask,request,jsonify, url_for,session
+from flask import request,jsonify, url_for
 from authlib.integrations.flask_client import OAuth # for login
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 from datetime import datetime
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import create_access_token, create_refresh_token,JWTManager
-from flask_cors import CORS
+from flask_jwt_extended import create_access_token, create_refresh_token
 from datetime import datetime
 
 load_dotenv()
 
-# app=Flask(__name__)
 bcrypt=Bcrypt()
-# CORS(app)
-# app.secret_key=os.getenv('SECRET_KEY')
-# app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-# jwt = JWTManager(app)
-
 
 client=MongoClient(os.getenv('MongoClient_URI'))
 db=client["techbay"]
@@ -169,7 +162,3 @@ def normal_login():
         "access_token": access_token,
         "refresh_token": refresh_token
     }), 200
-
-
-# if __name__== '__main__':
-#     app.run(host='0.0.0.0', port=5000,debug=True)

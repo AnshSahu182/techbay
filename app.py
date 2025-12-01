@@ -193,8 +193,8 @@ def view_orders_route(current_user):
 
 @app.route('/cancelorder/<string:order_id>', methods=['DELETE'])
 @token_required
-def cancel_order_route(current_user):
-    return cancel_order(current_user)
+def cancel_order_route(current_user, order_id):
+    return cancel_order(current_user, order_id)
 
 if __name__== '__main__':
     from dotenv import load_dotenv

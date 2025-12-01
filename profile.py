@@ -174,13 +174,13 @@ def delete_address(current_user):
 #Logout 
 # @app.route("/logout",methods=["POST"])
 # @token_required
-def logout(current_user):
+# def logout(current_user):
     
-    auth_header = request.headers.get('Authorization')
-    if auth_header and len(auth_header.split(" ")) == 2:
-        token = auth_header.split(" ")[1]
-    else:
-        return jsonify({'message': 'Token missing in request'}), 400
+#     auth_header = request.headers.get('Authorization')
+#     if auth_header and len(auth_header.split(" ")) == 2:
+#         token = auth_header.split(" ")[1]
+#     else:
+#         return jsonify({'message': 'Token missing in request'}), 400
 
    # blacklist.add(token)
     return jsonify({'message':'Logout successful'}),200

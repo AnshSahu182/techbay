@@ -6,15 +6,15 @@ from flask_cors import CORS
 from bson import ObjectId
 
 load_dotenv()
-app=Flask(__name__)
-CORS(app)
+# app=Flask(__name__)
+# CORS(app)
 client=MongoClient(os.getenv('MongoClient_URI'))
 db=client["techbay"]
 products=db["products"]
 categories=db["categories"]
 
 # Show Categories
-@app.route("/", methods=['GET'])
+# @app.route("/", methods=['GET'])
 def show_categories():
     category_list=list(categories.find({}))
     # Convert ObjectId to string
@@ -24,13 +24,17 @@ def show_categories():
     return jsonify(category_list)
 
 # Featured Products
-@app.route("/feature", methods=['GET'])
+# @app.route("/feature", methods=['GET'])
 def featured_products():
     featured_ids = [
         "65b54e14a39a3ffd12fd2c12",
         "65b54e14a39a3ffd12fd2c0e",
         "65b54e14a39a3ffd12fd2c0c",
-        "65b54e15a39a3ffd12fd2c16"
+        "65b54e15a39a3ffd12fd2c16",
+        "65b54e14a39a3ffd12fd2c00",
+        "65b54e14a39a3ffd12fd2bfc",
+        "65b54e14a39a3ffd12fd2c04",
+        "65b54e14a39a3ffd12fd2c02"
     ]
 
     # Convert strings to ObjectIds
@@ -47,7 +51,3 @@ def featured_products():
         prod["_id"] = str(prod["_id"])
 
     return jsonify(featured), 200
-
-
-if __name__== '__main__':
-    app.run(host='0.0.0.0', port=5001,debug=True)
