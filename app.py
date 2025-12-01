@@ -16,12 +16,12 @@ from wishlist import delete_from_wishlist,add_to_wishlist,view_wishlist
 from order import confirm_order, view_orders, cancel_order
 
 app=Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, supports_credentials=True)
 
 # Set secret key for JWT
 app.config["SECRET_KEY"]=os.getenv("SECRET_KEY")
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=10)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 
 # Initialize extensions
