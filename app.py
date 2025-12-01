@@ -8,7 +8,7 @@ from datetime import timedelta
 
 from signup import normal_signup,normal_login,google_signup,google_login,callback
 from home import show_categories,featured_products
-from product import products_page,get_by_brand,get_by_category,get_by_price,single_product
+from product import products_page,get_by_brand,get_by_category,get_by_price,single_product,search_products
 from authentication import token_required
 from profile import user_details,upload_profile_photo,add_address,view_address,delete_address,update_address,change_user_password
 from cart import view_cart,add_to_cart,delete_from_cart,reduce_from_cart
@@ -98,6 +98,10 @@ def get_by_price_route():
 @app.route("/products/<string:product_id>", methods=['GET'])
 def single_product_route(product_id):
     return single_product(product_id)
+
+@app.route("/products/search", methods=["GET"])
+def search_products_route():
+    return search_products()
 
 ##### COMMON Pages End #####
 

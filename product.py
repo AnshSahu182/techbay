@@ -83,3 +83,25 @@ def single_product(product_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 400
     
+# @app.route("/products/search", methods=["GET"])
+def search_products():
+    query = request.args.get("q", "").strip()
+
+    if not query:
+        return jsonify({"products": []}), 200
+
+    results = list(products.find(
+        {
+            "$or": [
+                {"title": {"$regex": query, "$options": "i"}},
+                {"description": {"$regex": query, "$options": "i"}},
+                {"category": {"$regex": query, "$options": "i"}}
+            ]
+        },
+    ))
+
+    # convert ObjectId to string
+    for p in results:
+        p["_id"] = str(p["_id"])
+
+    return jsonify({"products": results}), 200
