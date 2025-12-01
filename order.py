@@ -87,7 +87,7 @@ def view_orders(current_user):
     result = []
 
     for order in user_orders:
-        # Convert top-level fields
+
         formatted = {
             "_id": str(order["_id"]),
             "owner": str(order["owner"]),
@@ -99,16 +99,30 @@ def view_orders(current_user):
             "products": []
         }
 
-        # Convert products
+        # Loop through ordered products
         for p in order.get("products", []):
+            product_id = p["product_id"]
+
+            # Ensure ObjectId
+            if isinstance(product_id, str):
+                product_id = ObjectId(product_id)
+
+            # Fetch product details
+            product_details = products.find_one(
+                {"_id": product_id},
+                {"title": 1, "image": 1, "description": 1, "price": 1, "_id": 0}
+            )
+
             formatted["products"].append({
                 "product_id": str(p["product_id"]),
-                "quantity": p.get("quantity", 1)
+                "quantity": p.get("quantity", 1),
+                "product_details": product_details if product_details else {}
             })
 
         result.append(formatted)
 
     return jsonify({"orders": result}), 200
+
 
 
 # Cancel Order
