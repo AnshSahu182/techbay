@@ -10,6 +10,9 @@ from datetime import datetime
 from flask import redirect
 from oauth_config import oauth
 
+from google.oauth2 import id_token
+from google.auth.transport import requests
+
 load_dotenv()
 
 bcrypt=Bcrypt()
@@ -94,8 +97,7 @@ users=db["users"]
 #         "refresh_token": refresh_token
 #     })
 
-from google.oauth2 import id_token
-from google.auth.transport import requests
+
 
 
 def google_verify():

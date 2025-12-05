@@ -152,7 +152,7 @@ def update_address(current_user, address_id):
     }
 
     addresses.update_one(
-        {"owner": current_user["_id"]},
+        {"_id": ObjectId(address_id)},
         {"$set": update_data}
     )
 
