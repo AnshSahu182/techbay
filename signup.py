@@ -80,15 +80,13 @@ def callback():
         {"$set":{"refreshToken":refresh_token}}
     )
 
-    # # Detect if frontend requested a redirect
-    # is_browser = "text/html" in request.headers.get("Accept", "")
+    # Detect if frontend requested a redirect
+    is_browser = "text/html" in request.headers.get("Accept", "")
 
-    # if is_browser:
-    #     # REDIRECT path for browser login
-    #     frontend_url = "https://tech-bay-pi.vercel.app/"
-    #     return redirect(
-    #         f"{frontend_url}?email={email}&access_token={access_token}&refresh_token={refresh_token}"
-    #     )
+    if is_browser:
+        # REDIRECT path for browser login
+        frontend_url = "https://tech-bay-pi.vercel.app/"
+        return redirect(f"{frontend_url}?access_token={access_token}")
 
     return jsonify({
         "message": "Login successful",
