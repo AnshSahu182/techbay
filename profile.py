@@ -130,31 +130,41 @@ def view_address(current_user):
     return jsonify({"address": address_list}), 200
 
 #Update Address
-# @app.route('/updateaddress', methods=['PUT'])
-# @token_required
 def update_address(current_user, address_id):
     data = request.get_json()
 
-    # Find the address for this user
-    address = addresses.find_one({"_id":ObjectId(address_id)})
+    if not data:
+        return jsonify({"error": "No data received"}), 400
+
+    # Get address and ownership check
+    address = addresses.find_one({
+        "_id": ObjectId(address_id),
+        "owner": current_user["_id"]
+    })
+
     if not address:
         return jsonify({"error": "Address not found"}), 404
 
-    # Update allowed fields
-    update_data = {
-        "address": data.get("address", address.get("address")),
-        "mobile": data.get("mobile", address.get("mobile")),
-        "city": data.get("city", address.get("city")),
-        "state": data.get("state", address.get("state")),
-        "pincode": data.get("pincode", address.get("pincode")),
-        "type": data.get("type", address.get("type")),
-        "updatedAt": datetime.utcnow()
-    }
+    update_data = {}
+    allowed_fields = ["address","name", "mobile", "city", "state", "pincode", "type"]
 
-    addresses.update_one(
+    # ONLY update fields sent from frontend
+    for field in allowed_fields:
+        if field in data:
+            update_data[field] = data[field]
+
+    if not update_data:
+        return jsonify({"message": "No changes provided"}), 200
+
+    update_data["updatedAt"] = datetime.utcnow()
+
+    result = addresses.update_one(
         {"_id": ObjectId(address_id)},
         {"$set": update_data}
     )
+
+    if result.modified_count == 0:
+        return jsonify({"message": "No changes made"}), 200
 
     return jsonify({"message": "Address updated successfully"}), 200
 
@@ -176,8 +186,8 @@ def delete_address(current_user,address_id):
 def change_user_password(current_user):
     try:
         data = request.get_json()
-        old_password = data.get("password")
-        new_password = data.get("new_password")
+        old_password = data.get("currentPassword")
+        new_password = data.get("newPassword")
 
         if not old_password or not new_password:
             return jsonify({"message": "Both fields are required"}), 400
