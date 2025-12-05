@@ -31,7 +31,7 @@ bcrypt = Bcrypt(app)
 bcrypt.init_app(app)
 jwt = JWTManager(app)
 oauth.init_app(app)
-from signup import normal_signup,normal_login,google_verify,google_login,google_signup, callback
+from signup import normal_signup,normal_login,google_login,google_signup, callback
 
 # Connect MongoDB
 client=MongoClient(os.getenv('MongoClient_URI'))
@@ -56,9 +56,6 @@ def normal_signup_route():
 def google_signup_route():
     return google_signup()
 
-@app.route("/google/verify", methods=["POST"])
-def route_google_verify():
-    return google_verify()
 
 #Login Page
 
